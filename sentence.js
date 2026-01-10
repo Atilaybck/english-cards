@@ -42,12 +42,12 @@ let deck = [];
 let index = 0;
 
 function updateProgress() {
-  progressDiv.textContent =
-    deck.length === 0 ? "" : `${index + 1}/${deck.length}`;
+  progressDiv.textContent = deck.length === 0 ? "" : `${index + 1}/${deck.length}`;
 }
 
 function showNextCard() {
   container.innerHTML = "";
+
   if (index >= deck.length) {
     progressDiv.textContent = `${deck.length}/${deck.length}`;
     container.textContent = "✅ Bu sayfadaki tüm kartları tamamladın";
@@ -81,10 +81,12 @@ function showNextCard() {
     e.stopPropagation();
     handleResult("hiddenWords");
   };
+
   xBtn.onclick = (e) => {
     e.stopPropagation();
     handleResult("unlearnedWords");
   };
+
   card.onclick = () => card.classList.toggle("flipped");
 
   function handleResult(listName) {
@@ -93,6 +95,7 @@ function showNextCard() {
       arr.push(key);
       setLS(listName, arr);
     }
+
     if (listName === "hiddenWords") {
       const un = getLS("unlearnedWords");
       const idx = un.indexOf(key);
@@ -101,6 +104,7 @@ function showNextCard() {
         setLS("unlearnedWords", un);
       }
     }
+
     index++;
     updateProgress();
     showNextCard();
@@ -114,16 +118,20 @@ function showNextCard() {
 
 function updateStrike() {
   if (showUnlearned) return;
+
   const hidden = getLS("hiddenWords");
   const unlearn = getLS("unlearnedWords");
+
   pageButtons.forEach(({ page, btn }) => {
     btn.style.textDecoration = "none";
     btn.classList.remove("completed");
+
     fetchPages([page]).then((words) => {
       const visible = words.filter((w) => {
         const key = `${w.page}_${w.en}`;
         return !hidden.includes(key) && !unlearn.includes(key);
       });
+
       if (visible.length === 0) {
         btn.style.textDecoration = "line-through";
         btn.classList.add("completed");
@@ -135,28 +143,41 @@ function updateStrike() {
 function renderWords() {
   const hidden = getLS("hiddenWords");
   const unlearn = getLS("unlearnedWords");
-  const pagesToFetch = showUnlearned
-    ? pageButtons.map((p) => p.page)
-    : [currentPage];
+
+  const pagesToFetch = showUnlearned ? pageButtons.map((p) => p.page) : [currentPage];
+
   fetchPages(pagesToFetch).then((words) => {
     deck = words.filter(({ en, page }) => {
       const key = `${page}_${en}`;
       if (showUnlearned) return unlearn.includes(key);
       return !hidden.includes(key) && !unlearn.includes(key);
     });
+
     shuffle(deck);
     index = 0;
     showNextCard();
+
     pageButtons.forEach(({ btn, page }) =>
       btn.classList.toggle("active", !showUnlearned && page === currentPage)
     );
+
     unlearnBtn.classList.toggle("active", showUnlearned);
+
+    // ✅ Reset sonrası “tamamlandı” tik/çizgileri doğru güncellensin
+    updateStrike();
   });
 }
 
 resetBtn.onclick = () => {
   localStorage.removeItem("hiddenWords");
   localStorage.removeItem("unlearnedWords");
+
+  // ✅ Reset'e basınca sayfa butonlarındaki çizgi/tik görünümü hemen silinsin
+  pageButtons.forEach(({ btn }) => {
+    btn.style.textDecoration = "none";
+    btn.classList.remove("completed");
+  });
+
   showUnlearned = false;
   renderWords();
 };
@@ -169,21 +190,25 @@ unlearnBtn.onclick = () => {
 // ✅ Dinamik olarak sadece var olan pageX.json dosyaları için buton oluştur
 (async () => {
   const maxCheckPages = 50; // En fazla 50 sayfa kontrol edilecek
+
   for (let i = 1; i <= maxCheckPages; i++) {
     try {
       const res = await fetch(`data/page${i}.json`);
       if (!res.ok) break;
+
       await res.json(); // geçerli mi kontrol
       existingPages.push(i);
 
       const btn = document.createElement("button");
-      btn.textContent = `Sayfa ${i}`;
+      btn.textContent = `${i}`;
       btn.className = "pageBtn";
+
       btn.onclick = () => {
         currentPage = i;
         showUnlearned = false;
         renderWords();
       };
+
       pageButtons.push({ page: i, btn });
       pageButtonsContainer.appendChild(btn);
     } catch (err) {
@@ -230,8 +255,8 @@ searchBtn.onclick = async () => {
 searchInput.oninput = async () => {
   const input = searchInput.value.trim().toLowerCase();
   if (!liveResults) return;
-  liveResults.innerHTML = "";
 
+  liveResults.innerHTML = "";
   if (!input) return;
 
   for (const page of existingPages) {
@@ -242,6 +267,7 @@ searchInput.oninput = async () => {
       data.forEach((item) => {
         const tr = item.tr.toLowerCase();
         const en = item.en.toLowerCase();
+
         if (tr.startsWith(input) || en.startsWith(input)) {
           const li = document.createElement("li");
           li.textContent = `Sayfa ${page}: ${item.tr} – ${item.en}`;

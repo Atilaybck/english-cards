@@ -1,88 +1,406 @@
+:root {
+  /* Renk Paleti */
+  --primary: #4F46E5;
+  --primary-hover: #4338ca;
+  --secondary: #10B981;
+  --secondary-hover: #059669;
+  --danger: #EF4444;
+  --danger-hover: #dc2626;
+  --warning: #F59E0B;
+  --warning-hover: #d97706;
+
+  --bg-color: #F3F4F6;
+  --card-bg: #FFFFFF;
+  --text-main: #1F2937;
+  --text-muted: #6B7280;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Poppins', sans-serif;
+  --font-card: 'Montserrat', sans-serif;
+}
+
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #ffffff;
-  padding: 20px;
+  font-family: var(--font-sans);
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Kapsayıcı Yapı */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 20px;
+}
+
+.app-title {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 20px;
+  margin-bottom: 20px;
   text-align: center;
+  width: 100%;
 }
 
-/* Üst butonlar */
-#reset,
-#unlearnedBtn,
-.pageBtn {
-  background: #3b82f6;
-  color: #fff;
-  border: none;
+/* Main Content */
+.app-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.app-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  margin-top: auto;
+}
+
+/* Butonlar */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
+  border: none;
   border-radius: 8px;
-  font-size: 14px;
+  /* Rounded corners */
+  font-family: var(--font-heading);
+  font-size: 0.875rem;
+  font-weight: 500;
   cursor: pointer;
-  margin: 0 8px 10px 0;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
-#reset { background: #ef4444; }
-#unlearnedBtn { background: #f59e0b; }
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
 
-button.active { background-color: #1d4ed8 !important; }
-button.completed { background-color: #9333ea !important; }
+.btn:active {
+  transform: translateY(0);
+}
 
-/* Kart alanı – tek kart ortada */
-#cards {
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-hover);
+}
+
+.btn-warning {
+  background-color: var(--warning);
+  color: white;
+}
+
+.btn-warning:hover {
+  background-color: var(--warning-hover);
+}
+
+.pageBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  /* Prevent shrinking */
+  background-color: white;
+  color: var(--text-muted);
+  border: 1px solid #d1d5db;
+  margin: 0 4px;
+  /* Reduced vertical margin, spacing handled by gap in container */
+  padding: 0;
+  border-radius: 50%;
+  /* Circle */
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: none;
+}
+
+.pageBtn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background-color: #eff6ff;
+}
+
+.pageBtn.active {
+  background-color: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.4);
+}
+
+.pageBtn.completed {
+  background-color: white;
+  color: var(--secondary);
+  border-color: var(--secondary);
+  text-decoration: none;
+  position: relative;
+}
+
+/* Optional: Add a small checkmark for completed */
+.pageBtn.completed::after {
+  content: '✔';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 10px;
+  background: var(--secondary);
+  color: white;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Page Buttons List */
+.page-buttons-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 24px;
+}
+
+/* Search Area */
+.search-container {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.input-wrapper {
+  display: flex;
+  gap: 10px;
+}
+
+#searchInput {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.live-results {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  max-height: 200px;
+  overflow-y: auto;
+  box-shadow: var(--shadow-md);
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+  display: none;
+  /* JS ile gösterilecek */
+}
+
+.live-results:not(:empty) {
+  display: block;
+}
+
+.live-results li {
+  padding: 10px 16px;
+  border-bottom: 1px solid #f3f4f6;
+  cursor: pointer;
+}
+
+.live-results li:hover {
+  background-color: #f9fafb;
+}
+
+/* Kart Alanı */
+.card-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
   min-height: 300px;
-  margin-top: 20px;
+  /* Reduced min-height */
+  perspective: 1000px;
+  margin: 10px 0;
+  /* Reduced margin to move it up */
 }
 
 .card {
+  width: 100%;
+  max-width: 500px;
+  height: 220px;
+  /* Reduced height */
+  /* Fixed height for consistency */
   position: relative;
-  width: 80%;
-  max-width: 600px;
-  perspective: 800px;
   cursor: pointer;
+  perspective: 1000px;
 }
 
 .inner {
+  position: relative;
   width: 100%;
-  transition: transform 0.6s;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
   transform-style: preserve-3d;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border-radius: 24px;
 }
 
-.card.flipped .inner { transform: rotateY(180deg); }
+.card.flipped .inner {
+  transform: rotateY(180deg);
+}
 
 .side {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  padding: 24px;
-  box-sizing: border-box;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  height: 100%;
   backface-visibility: hidden;
-  font-size: 18px;
-  line-height: 1.4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 24px;
+  font-family: var(--font-card);
+  font-size: 1.25rem;
+  /* Smaller */
+  font-weight: 500;
+  /* Not bold */
+  color: var(--text-main);
+  background: white;
 }
 
-.front { background: #fff; }
-.back  { background: #e0e7ff; transform: rotateY(180deg); }
+.front {
+  background-color: white;
+  border: 1px solid #f3f4f6;
+}
 
+.back {
+  background-color: white;
+  transform: rotateY(180deg);
+  border: 1px solid #f3f4f6;
+  color: var(--primary);
+}
+
+/* Kart İçi Butonlar */
 .tick,
 .unlearn {
   position: absolute;
-  top: 8px;
-  width: 28px;
-  height: 28px;
+  top: -25px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  font-size: 18px;
-  font-weight: bold;
-  line-height: 28px;
-  text-align: center;
   border: none;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  z-index: 2;
+  z-index: 5;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s;
+  color: white;
 }
 
-.tick   { right: 8px;  background:#4ade80; color:#fff; }
-.unlearn{ left: 8px;  background:#f59e0b; color:#fff; }
+.tick:hover,
+.unlearn:hover {
+  transform: scale(1.1);
+}
+
+.tick {
+  right: -25px;
+  background-color: #10B981;
+  /* Vibrant Green */
+}
+
+.unlearn {
+  left: -25px;
+  background-color: #F89F10;
+  /* Orange closer to image */
+}
+
+/* Progress */
+.progress-indicator {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .card {
+    height: 250px;
+    max-width: 90%;
+  }
+
+  .side {
+    font-size: 1.25rem;
+  }
+}

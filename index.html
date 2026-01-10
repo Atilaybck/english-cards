@@ -1,33 +1,61 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>İngilizce Cümle Kartları</title>
 
+  <!-- Google Fonts: Inter & Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@600;700&family=Poppins:wght@500;600;700&display=swap"
+    rel="stylesheet">
+
   <link rel="stylesheet" href="sentence.css" />
   <script src="sentence.js" defer></script>
 </head>
+
 <body>
-  <button id="reset">Sıfırla</button>
-  <button id="unlearnedBtn">Yanıtlayamadıklarım</button>
+  <div class="app-container">
+    <header class="app-header">
+      <h1 class="app-title">Flashcards</h1>
+      <div class="header-controls">
+        <button id="reset" class="btn btn-danger">Sıfırla</button>
+        <button id="unlearnedBtn" class="btn btn-warning">Yanıtlayamadıklarım</button>
+      </div>
+    </header>
 
-  <!-- Sayfa düğmeleri -->
-  <div id="pageButtons"></div>
+    <main class="app-main">
+      <!-- Sayfa düğmeleri -->
+      <h2 class="section-title">SAYFALAR</h2>
+      <div id="pageButtons" class="page-buttons-list"></div>
 
-  <!-- Arama kutusu -->
-  <div style="margin: 10px 0;">
-    <input type="text" id="searchInput" placeholder="Kelime ara..." />
-    <button id="searchBtn">Ara</button>
+      <!-- Arama kutusu -->
+      <div class="search-container">
+        <div class="input-wrapper">
+          <input type="text" id="searchInput" placeholder="Kelime ara..." />
+          <button id="searchBtn" class="btn btn-primary">Ara</button>
+        </div>
+        <!-- Canlı sonuçlar için liste eklenebilir eğer JS tarafında varsa, yoksa searchResult div'i -->
+        <ul id="liveResults" class="live-results"></ul>
+      </div>
+
+      <!-- Arama sonucu -->
+      <div id="searchResult" class="search-feedback"></div>
+
+      <!-- İlerleme göstergesi -->
+      <div id="progress" class="progress-indicator"></div>
+
+      <!-- Tek kartın gösterileceği alan -->
+      <div id="cards" class="card-container"></div>
+    </main>
+
+    <footer class="app-footer">
+      <p>English Flashcards App &copy; 2026</p>
+    </footer>
   </div>
-
-  <!-- Arama sonucu -->
-  <div id="searchResult"></div>
-
-  <!-- İlerleme göstergesi -->
-  <div id="progress"></div>
-
-  <!-- Tek kartın gösterileceği alan -->
-  <div id="cards"></div>
 </body>
+
 </html>
