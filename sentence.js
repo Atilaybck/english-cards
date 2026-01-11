@@ -220,32 +220,67 @@ unlearnBtn.onclick = () => {
 })();
 
 // 🔍 Arama (butonla)
+// 🔍 Arama (butonla)
 searchBtn.onclick = async () => {
   const query = searchInput.value.trim().toLowerCase();
   if (!query) return;
 
   searchResult.textContent = "Aranıyor...";
-  let foundPages = [];
+  let foundSentences = [];
 
   for (const page of existingPages) {
     try {
       const res = await fetch(`data/page${page}.json`);
       const data = await res.json();
 
-      const match = data.some(
-        (item) =>
+      data.forEach((item) => {
+        if (
           item.tr.toLowerCase().includes(query) ||
           item.en.toLowerCase().includes(query)
-      );
-
-      if (match) foundPages.push(page);
+        ) {
+          foundSentences.push({ ...item, page });
+        }
+      });
     } catch (err) {
       console.error(`page${page}.json yüklenemedi`, err);
     }
   }
 
-  if (foundPages.length > 0) {
-    searchResult.innerHTML = `<strong>✅ Bulundu</strong> – Sayfa(lar): ${foundPages.join(", ")}`;
+  if (foundSentences.length > 0) {
+    const list = document.createElement("ul");
+    list.style.listStyle = "none";
+    list.style.padding = "0";
+
+    foundSentences.forEach((item) => {
+      const li = document.createElement("li");
+      li.style.background = "#fff";
+      li.style.margin = "5px 0";
+      li.style.padding = "10px";
+      li.style.borderRadius = "8px";
+      li.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+      li.innerHTML = `<strong>Sayfa ${item.page}:</strong> ${item.tr} <br> <small style="color:#666">${item.en}</small>`;
+
+      // Tıklayınca karta git
+      li.style.cursor = "pointer";
+      li.onclick = () => {
+        deck = [item];
+        index = 0;
+        currentPage = item.page; // Sayfayı güncelle
+
+        // Butonları güncelle
+        pageButtons.forEach(({ btn, page }) =>
+          btn.classList.toggle("active", page === currentPage)
+        );
+
+        showNextCard();
+        container.scrollIntoView({ behavior: "smooth" });
+      };
+
+      list.appendChild(li);
+    });
+
+    searchResult.innerHTML = "";
+    searchResult.appendChild(list);
   } else {
     searchResult.innerHTML = `<strong>❌ Bulunamadı</strong>`;
   }
@@ -268,9 +303,27 @@ searchInput.oninput = async () => {
         const tr = item.tr.toLowerCase();
         const en = item.en.toLowerCase();
 
-        if (tr.startsWith(input) || en.startsWith(input)) {
+        if (tr.includes(input) || en.includes(input)) {
           const li = document.createElement("li");
           li.textContent = `Sayfa ${page}: ${item.tr} – ${item.en}`;
+
+          li.style.cursor = "pointer";
+          li.onclick = () => {
+            deck = [{ ...item, page }];
+            index = 0;
+            currentPage = page; // Sayfayı güncelle
+
+            // Butonları güncelle
+            pageButtons.forEach(({ btn, page: p }) =>
+              btn.classList.toggle("active", p === currentPage)
+            );
+
+            showNextCard();
+            container.scrollIntoView({ behavior: "smooth" });
+            liveResults.innerHTML = ""; // Seçince listeyi temizle
+            searchInput.value = ""; // Inputu temizle
+          };
+
           liveResults.appendChild(li);
         }
       });
