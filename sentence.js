@@ -3,6 +3,7 @@ const container = document.getElementById("cards");
 const progressDiv = document.getElementById("progress");
 const resetBtn = document.getElementById("reset");
 const unlearnBtn = document.getElementById("unlearnedBtn");
+const randomBtn = document.getElementById("randomBtn");
 const pageButtonsContainer = document.getElementById("pageButtons");
 const searchBtn = document.getElementById("searchBtn");
 const searchInput = document.getElementById("searchInput");
@@ -11,6 +12,7 @@ const liveResults = document.getElementById("liveResults");
 
 let currentPage = 1;
 let showUnlearned = false;
+let showRandom = false;
 const pageButtons = [];
 let existingPages = [];
 
@@ -49,8 +51,8 @@ function showNextCard() {
   container.innerHTML = "";
 
   if (index >= deck.length) {
-    progressDiv.textContent = `${deck.length}/${deck.length}`;
-    container.textContent = "✅ Bu sayfadaki tüm kartları tamamladın";
+    progressDiv.textContent = deck.length === 0 ? "" : `${deck.length}/${deck.length}`;
+    container.textContent = "✅ Bu kartların hepsini tamamladın";
     updateStrike();
     return;
   }
@@ -117,7 +119,7 @@ function showNextCard() {
 }
 
 function updateStrike() {
-  if (showUnlearned) return;
+  if (showUnlearned || showRandom) return;
 
   const hidden = getLS("hiddenWords");
   const unlearn = getLS("unlearnedWords");
@@ -144,12 +146,19 @@ function renderWords() {
   const hidden = getLS("hiddenWords");
   const unlearn = getLS("unlearnedWords");
 
-  const pagesToFetch = showUnlearned ? pageButtons.map((p) => p.page) : [currentPage];
+  let pagesToFetch = [currentPage];
+
+  if (showUnlearned || showRandom) {
+    pagesToFetch = pageButtons.map((p) => p.page);
+  }
 
   fetchPages(pagesToFetch).then((words) => {
     deck = words.filter(({ en, page }) => {
       const key = `${page}_${en}`;
+
       if (showUnlearned) return unlearn.includes(key);
+      if (showRandom) return !hidden.includes(key) && !unlearn.includes(key);
+
       return !hidden.includes(key) && !unlearn.includes(key);
     });
 
@@ -158,12 +167,14 @@ function renderWords() {
     showNextCard();
 
     pageButtons.forEach(({ btn, page }) =>
-      btn.classList.toggle("active", !showUnlearned && page === currentPage)
+      btn.classList.toggle("active", !showUnlearned && !showRandom && page === currentPage)
     );
 
     unlearnBtn.classList.toggle("active", showUnlearned);
+    if (randomBtn) {
+      randomBtn.classList.toggle("active", showRandom);
+    }
 
-    // ✅ Reset sonrası “tamamlandı” tik/çizgileri doğru güncellensin
     updateStrike();
   });
 }
@@ -172,31 +183,41 @@ resetBtn.onclick = () => {
   localStorage.removeItem("hiddenWords");
   localStorage.removeItem("unlearnedWords");
 
-  // ✅ Reset'e basınca sayfa butonlarındaki çizgi/tik görünümü hemen silinsin
   pageButtons.forEach(({ btn }) => {
     btn.style.textDecoration = "none";
     btn.classList.remove("completed");
+    btn.classList.remove("active");
   });
 
   showUnlearned = false;
+  showRandom = false;
   renderWords();
 };
 
 unlearnBtn.onclick = () => {
   showUnlearned = true;
+  showRandom = false;
   renderWords();
 };
 
-// ✅ Dinamik olarak sadece var olan pageX.json dosyaları için buton oluştur
+if (randomBtn) {
+  randomBtn.onclick = () => {
+    showRandom = true;
+    showUnlearned = false;
+    renderWords();
+  };
+}
+
+// Dinamik olarak sadece var olan pageX.json dosyaları için buton oluştur
 (async () => {
-  const maxCheckPages = 50; // En fazla 50 sayfa kontrol edilecek
+  const maxCheckPages = 50;
 
   for (let i = 1; i <= maxCheckPages; i++) {
     try {
       const res = await fetch(`data/page${i}.json`);
       if (!res.ok) break;
 
-      await res.json(); // geçerli mi kontrol
+      await res.json();
       existingPages.push(i);
 
       const btn = document.createElement("button");
@@ -206,6 +227,7 @@ unlearnBtn.onclick = () => {
       btn.onclick = () => {
         currentPage = i;
         showUnlearned = false;
+        showRandom = false;
         renderWords();
       };
 
@@ -219,8 +241,7 @@ unlearnBtn.onclick = () => {
   renderWords();
 })();
 
-// 🔍 Arama (butonla)
-// 🔍 Arama (butonla)
+// Arama (butonla)
 searchBtn.onclick = async () => {
   const query = searchInput.value.trim().toLowerCase();
   if (!query) return;
@@ -260,17 +281,20 @@ searchBtn.onclick = async () => {
       li.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
       li.innerHTML = `<strong>Sayfa ${item.page}:</strong> ${item.tr} <br> <small style="color:#666">${item.en}</small>`;
 
-      // Tıklayınca karta git
       li.style.cursor = "pointer";
       li.onclick = () => {
         deck = [item];
         index = 0;
-        currentPage = item.page; // Sayfayı güncelle
+        currentPage = item.page;
+        showUnlearned = false;
+        showRandom = false;
 
-        // Butonları güncelle
         pageButtons.forEach(({ btn, page }) =>
           btn.classList.toggle("active", page === currentPage)
         );
+
+        unlearnBtn.classList.remove("active");
+        if (randomBtn) randomBtn.classList.remove("active");
 
         showNextCard();
         container.scrollIntoView({ behavior: "smooth" });
@@ -286,7 +310,7 @@ searchBtn.onclick = async () => {
   }
 };
 
-// 🔍 Canlı arama (yazdıkça)
+// Canlı arama
 searchInput.oninput = async () => {
   const input = searchInput.value.trim().toLowerCase();
   if (!liveResults) return;
@@ -311,17 +335,21 @@ searchInput.oninput = async () => {
           li.onclick = () => {
             deck = [{ ...item, page }];
             index = 0;
-            currentPage = page; // Sayfayı güncelle
+            currentPage = page;
+            showUnlearned = false;
+            showRandom = false;
 
-            // Butonları güncelle
             pageButtons.forEach(({ btn, page: p }) =>
               btn.classList.toggle("active", p === currentPage)
             );
 
+            unlearnBtn.classList.remove("active");
+            if (randomBtn) randomBtn.classList.remove("active");
+
             showNextCard();
             container.scrollIntoView({ behavior: "smooth" });
-            liveResults.innerHTML = ""; // Seçince listeyi temizle
-            searchInput.value = ""; // Inputu temizle
+            liveResults.innerHTML = "";
+            searchInput.value = "";
           };
 
           liveResults.appendChild(li);

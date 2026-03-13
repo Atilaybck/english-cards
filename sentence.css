@@ -1,26 +1,29 @@
 :root {
-  /* Renk Paleti */
-  --primary: #4F46E5;
+  --primary: #4f46e5;
   --primary-hover: #4338ca;
-  --secondary: #10B981;
+  --secondary: #10b981;
   --secondary-hover: #059669;
-  --danger: #EF4444;
+  --danger: #ef4444;
   --danger-hover: #dc2626;
-  --warning: #F59E0B;
+  --warning: #f59e0b;
   --warning-hover: #d97706;
 
-  --bg-color: #F3F4F6;
-  --card-bg: #FFFFFF;
-  --text-main: #1F2937;
-  --text-muted: #6B7280;
+  --bg-color: #f3f4f6;
+  --card-bg: #ffffff;
+  --text-main: #1f2937;
+  --text-muted: #6b7280;
 
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-  --font-sans: 'Inter', sans-serif;
-  --font-heading: 'Poppins', sans-serif;
-  --font-card: 'Montserrat', sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "Poppins", sans-serif;
+  --font-card: "Montserrat", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -32,7 +35,6 @@ body {
   min-height: 100vh;
 }
 
-/* Kapsayıcı Yapı */
 .app-container {
   display: flex;
   flex-direction: column;
@@ -42,11 +44,11 @@ body {
   padding: 0 20px;
 }
 
-/* Header */
 .app-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 16px;
   padding: 20px 0;
   border-bottom: 2px solid #e5e7eb;
   margin-bottom: 20px;
@@ -63,6 +65,7 @@ body {
 .header-controls {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .section-title {
@@ -77,7 +80,6 @@ body {
   width: 100%;
 }
 
-/* Main Content */
 .app-main {
   flex: 1;
   display: flex;
@@ -94,7 +96,6 @@ body {
   margin-top: auto;
 }
 
-/* Butonlar */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -102,7 +103,6 @@ body {
   padding: 8px 16px;
   border: none;
   border-radius: 8px;
-  /* Rounded corners */
   font-family: var(--font-heading);
   font-size: 0.875rem;
   font-weight: 500;
@@ -118,6 +118,11 @@ body {
 
 .btn:active {
   transform: translateY(0);
+}
+
+.btn.active {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
 }
 
 .btn-primary {
@@ -154,15 +159,12 @@ body {
   width: 40px;
   height: 40px;
   min-width: 40px;
-  /* Prevent shrinking */
   background-color: white;
   color: var(--text-muted);
   border: 1px solid #d1d5db;
   margin: 0 4px;
-  /* Reduced vertical margin, spacing handled by gap in container */
   padding: 0;
   border-radius: 50%;
-  /* Circle */
   font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
@@ -191,9 +193,8 @@ body {
   position: relative;
 }
 
-/* Optional: Add a small checkmark for completed */
 .pageBtn.completed::after {
-  content: '✔';
+  content: "✔";
   position: absolute;
   top: -5px;
   right: -5px;
@@ -208,7 +209,6 @@ body {
   justify-content: center;
 }
 
-/* Page Buttons List */
 .page-buttons-list {
   display: flex;
   flex-wrap: wrap;
@@ -217,7 +217,6 @@ body {
   margin-bottom: 24px;
 }
 
-/* Search Area */
 .search-container {
   width: 100%;
   max-width: 500px;
@@ -245,6 +244,12 @@ body {
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
+.search-feedback {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 16px;
+}
+
 .live-results {
   list-style: none;
   padding: 0;
@@ -259,7 +264,6 @@ body {
   width: 100%;
   z-index: 10;
   display: none;
-  /* JS ile gösterilecek */
 }
 
 .live-results:not(:empty) {
@@ -272,29 +276,28 @@ body {
   cursor: pointer;
 }
 
+.live-results li:last-child {
+  border-bottom: none;
+}
+
 .live-results li:hover {
   background-color: #f9fafb;
 }
 
-/* Kart Alanı */
 .card-container {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   min-height: 300px;
-  /* Reduced min-height */
   perspective: 1000px;
   margin: 10px 0;
-  /* Reduced margin to move it up */
 }
 
 .card {
   width: 100%;
   max-width: 500px;
   height: 220px;
-  /* Reduced height */
-  /* Fixed height for consistency */
   position: relative;
   cursor: pointer;
   perspective: 1000px;
@@ -328,11 +331,10 @@ body {
   border-radius: 24px;
   font-family: var(--font-card);
   font-size: 1.25rem;
-  /* Smaller */
   font-weight: 500;
-  /* Not bold */
   color: var(--text-main);
   background: white;
+  text-align: center;
 }
 
 .front {
@@ -347,7 +349,6 @@ body {
   color: var(--primary);
 }
 
-/* Kart İçi Butonlar */
 .tick,
 .unlearn {
   position: absolute;
@@ -374,17 +375,14 @@ body {
 
 .tick {
   right: -25px;
-  background-color: #10B981;
-  /* Vibrant Green */
+  background-color: #10b981;
 }
 
 .unlearn {
   left: -25px;
-  background-color: #F89F10;
-  /* Orange closer to image */
+  background-color: #f89f10;
 }
 
-/* Progress */
 .progress-indicator {
   font-family: var(--font-heading);
   font-size: 1.125rem;
@@ -393,14 +391,56 @@ body {
   margin-bottom: 10px;
 }
 
-/* Responsive */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .app-title {
+    text-align: center;
+  }
+
+  .header-controls {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 600px) {
+  .app-container {
+    padding: 0 14px;
+  }
+
+  .input-wrapper {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
   .card {
     height: 250px;
     max-width: 90%;
   }
 
   .side {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    padding: 22px;
+  }
+
+  .tick,
+  .unlearn {
+    width: 44px;
+    height: 44px;
+    top: -18px;
+  }
+
+  .tick {
+    right: -10px;
+  }
+
+  .unlearn {
+    left: -10px;
   }
 }
