@@ -1,6 +1,62 @@
 [
-    {
-        "tr": ".........",
-        "en": "........."
-    }
+  {
+    "tr": "Bu cümle mantıklı gelmiyor.",
+    "en": "This sentence doesn’t make sense."
+  },
+  {
+    "tr": "Problemi anlamaya çalıştı.",
+    "en": "She tried to make sense of the problem."
+  },
+  {
+    "tr": "Bu durumu anlamak zor.",
+    "en": "It’s hard to make sense of this situation."
+  },
+  {
+    "tr": "Belgeleri e-postayla birlikte gönderdim.",
+    "en": "I sent the documents along with the email."
+  },
+  {
+    "tr": "Başarıyla birlikte sorumluluk da gelir.",
+    "en": "Success comes along with responsibility."
+  },
+  {
+    "tr": "Hızlı kararlar almaya meyillidir.",
+    "en": "He is inclined to make quick decisions."
+  },
+  {
+    "tr": "Teklifi kabul etmeye yatkın görünüyor.",
+    "en": "He seems inclined to accept the offer."
+  },
+  {
+    "tr": "Daha ucuz seçeneği seçmeye meyilliler.",
+    "en": "They are inclined to choose the cheaper option."
+  },
+  {
+    "tr": "Bu problemle uğraşıyorum.",
+    "en": "I’m wrestling with this problem."
+  },
+  {
+    "tr": "Karmaşık bir konuyla uğraşıyoruz.",
+    "en": "We are wrestling with a complex issue."
+  },
+  {
+    "tr": "Finansal sorunlarla mücadele ediyorlar.",
+    "en": "They are wrestling with financial problems."
+  },
+  {
+    "tr": "Artık bu gürültüye katlanamıyorum.",
+    "en": "I can’t put up with this noise anymore."
+  },
+  {
+    "tr": "Zor müşterilere katlanmak zorunda.",
+    "en": "She has to put up with difficult customers."
+  },
+  {
+    "tr": "Onun tavırlarına katlanamıyor.",
+    "en": "He can’t put up with his attitude."
+  },
+  {
+    "tr": "Bu davranışa katlanmamalıyız.",
+    "en": "We shouldn’t put up with this behavior."
+  }
 ]
